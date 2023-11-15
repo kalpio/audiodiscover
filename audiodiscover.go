@@ -1,4 +1,4 @@
-package audiodevice
+package audiodiscover
 
 import (
 	"os/exec"
