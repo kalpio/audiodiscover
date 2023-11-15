@@ -13,7 +13,7 @@ type discover struct {
 	ffmpeg string // path to ffmpeg executable
 }
 
-func NewDevice(ffmpeg string) *discover {
+func NewDiscover(ffmpeg string) *discover {
 	return &discover{
 		ffmpeg: ffmpeg,
 	}
