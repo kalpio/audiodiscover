@@ -1,13 +1,10 @@
 package audiodiscover
 
 import (
+	"github.com/kalpio/audiodiscover/domain"
 	"os/exec"
 	"strings"
 )
-
-type Device struct {
-	Name string
-}
 
 type discover struct {
 	ffmpeg string // path to ffmpeg executable
@@ -19,15 +16,15 @@ func NewDiscover(ffmpeg string) *discover {
 	}
 }
 
-func (d discover) Devices() ([]Device, error) {
+func (d discover) Devices() ([]domain.Device, error) {
 	cmd := exec.Command(d.ffmpeg, listDevicesSwitches()...)
 	out, _ := cmd.CombinedOutput()
 
 	return d.parseDevices(out), nil
 }
 
-func (d discover) parseDevices(out []byte) []Device {
-	var result []Device
+func (d discover) parseDevices(out []byte) []domain.Device {
+	var result []domain.Device
 	value := string(out)
 	arr := strings.Split(value, "\n")
 	for _, s := range arr {
@@ -38,7 +35,7 @@ func (d discover) parseDevices(out []byte) []Device {
 	return result
 }
 
-func (discover) getDeviceName(s string) *Device {
+func (discover) getDeviceName(s string) *domain.Device {
 	startIndex := strings.Index(s, "\"")
 	if startIndex == -1 {
 		return nil
@@ -52,5 +49,5 @@ func (discover) getDeviceName(s string) *Device {
 	val := s[startIndex:lastIndex]
 	name := strings.Trim(
 		strings.TrimSpace(val), "\"")
-	return &Device{Name: name}
+	return &domain.Device{Name: name}
 }
